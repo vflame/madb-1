@@ -138,15 +138,22 @@ namespace SharpAdbClient
             // then close the socket.
             if (this.monitorTask != null)
             {
-                this.IsRunning = false;
+                try
+                {
+                    this.IsRunning = false;
 
-                // Stop the thread. The tread will keep waiting for updated information from adb
-                // eternally, so we need to forcefully abort it here.
-                this.monitorTaskCancellationTokenSource.Cancel();
-                this.monitorTask.Wait();
+                    // Stop the thread. The tread will keep waiting for updated information from adb
+                    // eternally, so we need to forcefully abort it here.
+                    this.monitorTaskCancellationTokenSource.Cancel();
+                    this.monitorTask.Wait();
 
-                this.monitorTask.Dispose();
-                this.monitorTask = null;
+                    this.monitorTask.Dispose();
+                    this.monitorTask = null;
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
 
             // Close the connection to adb. To be done after the monitor task exited.
